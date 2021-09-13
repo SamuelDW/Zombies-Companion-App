@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Undocumented class
@@ -17,6 +18,8 @@ class RegistrationController extends AbstractController
 {
     /**
      * Registering a new user.
+     * 
+     * @Route("/ajax/registration", name="registration")
      *
      * @return Response
      */
@@ -29,9 +32,8 @@ class RegistrationController extends AbstractController
            // dd("I'm here", $registrationForm->getData());
             $newUserData = $registrationForm->getData();
 
-           // dd($newUserData);
+            dd($newUserData);
             return new RedirectResponse($request->headers->get('referer'));
-
         }
 
         return new RedirectResponse($request->headers->get('referer'));

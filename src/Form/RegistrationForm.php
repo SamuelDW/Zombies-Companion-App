@@ -22,7 +22,7 @@ class RegistrationFormType extends AbstractType
      *
      * @param FormBuilderInterface $builder
      * @param array $options
-     * 
+     *
      * @return void
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -34,7 +34,7 @@ class RegistrationFormType extends AbstractType
                 'class' => 'form-input input-type-text',
                 'placeholder' => 'John',
             ],
-            
+
         ]);
 
         $builder->add('lastName', TextType::class, [
@@ -44,7 +44,7 @@ class RegistrationFormType extends AbstractType
                 'class' => 'form-input input-type-text',
                 'placeholder' => 'Doe'
             ],
-            
+
         ]);
 
         $builder->add('email', EmailType::class, [
@@ -76,7 +76,7 @@ class RegistrationFormType extends AbstractType
             'label' => 'I accept the terms & conditions',
             'required' => true,
         ]);
-        
+
         $builder->add('privacyPolicy', CheckboxType::class, [
             'label' => 'I have read and understood the privacy policy',
             'required' => true,
@@ -84,7 +84,7 @@ class RegistrationFormType extends AbstractType
 
         $builder->add('emailFrequency', ChoiceType::class, [
             'label' => 'Opt in to emails:',
-            'multiple' => false, 
+            'multiple' => false,
             'expanded' => true,
             'choices' => [
                 'Yes' => 'email_yes',
@@ -95,13 +95,12 @@ class RegistrationFormType extends AbstractType
 
     /**
      * @param OptionsResolver $resolver
-     * 
+     *
      * @return void
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-        ]);
+        $resolver->setDefaults([]);
     }
 
     /**
