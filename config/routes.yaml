@@ -1,3 +1,15 @@
 index:
    path: /
    controller: App\Controller\HomeController::index
+
+login:
+   path: /login
+   controller: App\Controller\Security\SecurityController::login
+
+logout:
+   path: /logout
+   controller: App\Controller\SecurityController::logout
+
+registration:
+   path: /registration
+   controller: App\Controller\Security\RegistrationController::register
