@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,9 +22,8 @@ class HomeController extends AbstractController
      */
     public function index(UserRepository $userRepository): Response
     {
-        $registerForm = $this->createForm(RegistrationFormType::class);
-
-        //dd($userRepository->getUserByUserIdentifier('samueldurw@outlook.com'));
+        $user = new User();
+        $registerForm = $this->createForm(RegistrationFormType::class, $user);
 
         $pageContent = [
             'registrationForm' => $registerForm->createView(),

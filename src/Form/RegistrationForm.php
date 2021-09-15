@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -72,23 +73,36 @@ class RegistrationFormType extends AbstractType
             ]
         ]);
 
-        $builder->add('termsConditions', CheckboxType::class, [
-            'label' => 'I accept the terms & conditions',
+        $builder->add('acceptTermsAndConditions', ChoiceType::class, [
+            'label' => 'I accept the terms and conditions',
             'required' => true,
-        ]);
-
-        $builder->add('privacyPolicy', CheckboxType::class, [
-            'label' => 'I have read and understood the privacy policy',
-            'required' => true,
-        ]);
-
-        $builder->add('emailFrequency', ChoiceType::class, [
-            'label' => 'Opt in to emails:',
             'multiple' => false,
             'expanded' => true,
             'choices' => [
-                'Yes' => 'email_yes',
-                'No' => 'email_no',
+                'Yes' => true,
+                'No' => false,
+            ],
+        ]);
+
+        $builder->add('acceptPrivacyPolicy', ChoiceType::class, [
+            'label' => 'I have read and understood the privacy policy',
+            'required' => true,
+            'multiple' => false,
+            'expanded' => true,
+            'choices' => [
+                'Yes' => true,
+                'No' => false,
+            ],
+        ]);
+
+        $builder->add('emailOptIn', ChoiceType::class, [
+            'label' => 'Opt in to emails:',
+            'required' => true,
+            'multiple' => false,
+            'expanded' => true,
+            'choices' => [
+                'Yes' => true,
+                'No' => false,
             ],
         ]);
     }
@@ -100,7 +114,9 @@ class RegistrationFormType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([]);
+        $resolver->setDefaults([
+            'data_class' => User::class,
+        ]);
     }
 
     /**

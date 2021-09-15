@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use Carbon\Carbon;
+use App\Entity\Trait\TimestampableEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
@@ -17,6 +17,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements UserInterface
 {
+    use TimestampableEntity;
+
     /**
      * @var int
      *
@@ -77,7 +79,6 @@ class User implements UserInterface
      * @ORM\Column(name="strPassword", type="string", nullable=false)
      *
      * @Assert\NotNull()
-     * @Assert\Regex(pattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
      *
      * @SecurityAssert\UserPassword(message = "Password is incorrect, please try again")
      */
@@ -89,39 +90,41 @@ class User implements UserInterface
      * @ORM\Column(name="strEmail", type="string", nullable=false)
      *
      * @Assert\Unique()
-     * @Assert\Regex(pattern = "\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b")
+     * @Assert\Email()
      */
     private string $email;
 
     /**
-     * User constructor.
-     *
-     * @param string $firstName
-     * @param string $lastName
-     * @param string $username
-     * @param string $email
-     * @param string $password
+     * @var bool
+     * 
+     *  @ORM\Column(name="bolAcceptTermsConditions", type="boolean", nullable=false)
+     * 
+     * @Assert\NotNull()
      */
-    public function __construct(
-        string $firstName,
-        string $lastName,
-        string $username,
-        string $email,
-        string $password
-    ) {
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->username = $username;
-        $this->email = $email;
-        $this->password = $password;
+    private bool $acceptTermsAndConditions;
 
-        $this->dtmAdded = Carbon::now();
-    }
+    /**
+     * @var bool
+     * 
+     *  @ORM\Column(name="bolAcceptPrivacyPolicy", type="boolean", nullable=false)
+     * 
+     * @Assert\NotNull()
+     */
+    private bool $acceptPrivacyPolicy;
+
+    /**
+     * @var bool
+     * 
+     * @ORM\Column(name="bolEmailOptIn", type="boolean", nullable=false)
+     * 
+     * @Assert\NotNull()
+     */
+    private bool $emailOptIn;
 
     /**
      * @return string
      */
-    private function getName(): string
+    public function getFullName(): string
     {
         return $this->firstName . " " . $this->lastName;
     }
@@ -129,7 +132,7 @@ class User implements UserInterface
     /**
      * @return string
      */
-    private function getFirstName(): string
+    public function getFirstName(): string
     {
         return $this->firstName;
     }
@@ -137,17 +140,9 @@ class User implements UserInterface
     /**
      * @return string
      */
-    private function getLastName(): string
+    public function getLastName(): string
     {
         return $this->lastName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFullName(): string
-    {
-        return $this->firstName . ' ' . $this->lastName;
     }
 
     /**
@@ -169,6 +164,36 @@ class User implements UserInterface
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return boolean
+     */
+    public function getAcceptTermsAndConditions(): bool
+    {
+        return $this->acceptTermsAndConditions;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return boolean
+     */
+    public function getAcceptPrivacyPolicy(): bool
+    {
+        return $this->acceptPrivacyPolicy;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return boolean
+     */
+    public function getEmailOptIn(): bool
+    {
+        return $this->emailOptIn;
     }
 
     /**
@@ -198,5 +223,63 @@ class User implements UserInterface
     public function getUsername(): string
     {
         return $this->username;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param string $firstname
+     * 
+     * @return void
+     */
+    public function setFirstName(string $firstname)
+    {
+        $this->firstName = $firstname;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param string $lastName
+     * @return void
+     */
+    public function setLastName(string $lastName)
+    {
+        $this->lastName = $lastName;
+    }
+
+    public function setEmail(string $email)
+    {
+        $this->email = $email;
+    }
+
+    public function setUsername(string $username)
+    {
+        $this->username = $username;
+    }
+
+    public function setPassword(string $password)
+    {
+        $this->password = $password;
+    }
+
+    public function setAcceptTermsAndConditions(bool $accepted)
+    {
+        $this->acceptTermsAndConditions = $accepted;
+    }
+
+    public function setAcceptPrivacyPolicy(bool $accepted)
+    {
+        $this->acceptPrivacyPolicy = $accepted;
+    }
+
+    public function setEmailOptIn(bool $accepted)
+    {
+        $this->emailOptIn = $accepted;
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 }
