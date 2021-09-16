@@ -20,28 +20,40 @@ use Symfony\Component\Routing\Annotation\Route;
 class RegistrationController extends AbstractController
 {
     /**
-     * Registering a new user.
+     * Registraion method
      * 
      * @Route("/registration", name="registration")
      *
      * @return Response
      */
-    public function register(
-        Request $request, 
-        EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $userPasswordHasherInterface
-    ): Response {
+    public function register(Request $request, EntityManagerInterface $entityManager,
+    UserPasswordHasherInterface $passwordHasher): Response
+    {
         $user = new User();
         $registrationForm = $this->createForm(RegistrationFormType::class, $user);
 
         $registrationForm->handleRequest($request);
         if ($registrationForm->isSubmitted() && $registrationForm->isValid()) {
+            $password = $passwordHasher->hashPassword($user, $user->getPlainPassword());
+            $user->setPassword($password);
+
+            dd($user->getPlainPassword(), $user->getPassword());
+
             $entityManager->persist($user);
             $entityManager->flush();
+
+            $pageContent = [
+                'registrationForm' => $registrationForm->createView(),
+            ];
             
-            return new RedirectResponse($request->headers->get('referer'));
+            return $this->render('base.html.twig', $pageContent);
         }
 
+        $pageContent = [
+            'registrationForm' => $registrationForm->createView(),
+            'formErrors' => $registrationForm->getErrors()
+        ];
+        
         return new RedirectResponse($request->headers->get('referer'));
     }
 }

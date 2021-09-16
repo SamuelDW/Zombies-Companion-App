@@ -6,7 +6,6 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -35,7 +34,6 @@ class RegistrationFormType extends AbstractType
                 'class' => 'form-input input-type-text',
                 'placeholder' => 'John',
             ],
-
         ]);
 
         $builder->add('lastName', TextType::class, [
@@ -45,7 +43,6 @@ class RegistrationFormType extends AbstractType
                 'class' => 'form-input input-type-text',
                 'placeholder' => 'Doe'
             ],
-
         ]);
 
         $builder->add('email', EmailType::class, [
@@ -54,7 +51,7 @@ class RegistrationFormType extends AbstractType
             'attr' => [
                 'class' => 'form-input input-type-email',
                 'placeholder' => 'example@example.com'
-            ]
+            ],
         ]);
 
         $builder->add('username', TextType::class, [
@@ -62,15 +59,15 @@ class RegistrationFormType extends AbstractType
             'required' => true,
             'attr' => [
                 'class' => 'form-input input-type-text',
-            ]
+            ],
         ]);
 
-        $builder->add('password', PasswordType::class, [
+        $builder->add('plainPassword', PasswordType::class, [
             'label' => 'Password:',
             'required' => true,
             'attr' => [
                 'class' => 'form-input input-type-email',
-            ]
+            ],
         ]);
 
         $builder->add('acceptTermsAndConditions', ChoiceType::class, [
@@ -116,6 +113,7 @@ class RegistrationFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'mapped' => true,
         ]);
     }
 

@@ -63,7 +63,6 @@ class User implements UserInterface
      *
      * @ORM\Column(name="strUsername", type="string", nullable=false)
      *
-     * @Assert\Unique()
      * @Assert\Length(
      *        min = 2,
      *        max = 15,
@@ -78,18 +77,23 @@ class User implements UserInterface
      *
      * @ORM\Column(name="strPassword", type="string", nullable=false)
      *
-     * @Assert\NotNull()
-     *
-     * @SecurityAssert\UserPassword(message = "Password is incorrect, please try again")
      */
     private string $password;
+
+    /**
+     * Plain string password used for form registration
+     *
+     * @var string
+     * 
+     */
+    private string $plainPassword;
 
     /**
      * @var string
      *
      * @ORM\Column(name="strEmail", type="string", nullable=false)
      *
-     * @Assert\Unique()
+     * @Assert\NotNull()
      * @Assert\Email()
      */
     private string $email;
@@ -164,6 +168,11 @@ class User implements UserInterface
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    public function getPlainPassword(): string
+    {
+        return $this->plainPassword;
     }
 
     /**
@@ -256,6 +265,11 @@ class User implements UserInterface
     public function setUsername(string $username)
     {
         $this->username = $username;
+    }
+
+    public function setPlainPassword($password)
+    {
+        $this->plainPassword = $password;
     }
 
     public function setPassword(string $password)
