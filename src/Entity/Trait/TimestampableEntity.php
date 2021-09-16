@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity\Trait;
 
 use Carbon\Carbon;
+use DateTime;
 
 trait TimestampableEntity
 {
@@ -13,12 +14,12 @@ trait TimestampableEntity
      * 
      * @ORM\Column(name="dtmAdded", type="datetime", nullable=false)
      */
-    private Carbon $dtmAdded;
+    private DateTime $dateAdded;
 
     /**
      * @var Carbon
      * 
      * @ORM\Column(name="dtmUpdated", type="datetime", nullable=true)
      */
-    private Carbon $dtmUpdated;
+    private Carbon $dateUpdated;
 }

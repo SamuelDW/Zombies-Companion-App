@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Entity\Trait\TimestampableEntity;
+use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
@@ -124,6 +125,11 @@ class User implements UserInterface
      * @Assert\NotNull()
      */
     private bool $emailOptIn;
+
+    public function __construct()
+    {
+        $this->dateAdded = Carbon::now();
+    }
 
     /**
      * @return string
