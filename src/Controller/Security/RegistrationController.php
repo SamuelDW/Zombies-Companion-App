@@ -15,19 +15,22 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Undocumented class
+ * Controller handling the registration of new users
  */
 class RegistrationController extends AbstractController
 {
     /**
-     * Registraion method
+     * AJAX Registraion method
      * 
-     * @Route("/registration", name="registration")
+     * @Route("/registration", name="registration", options= {"expose" = true})
      *
      * @return Response
      */
-    public function register(Request $request, EntityManagerInterface $entityManager,
-    UserPasswordHasherInterface $passwordHasher): Response
+    public function register(
+        Request $request, 
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $passwordHasher
+    ): Response
     {
         $user = new User();
         $registrationForm = $this->createForm(RegistrationFormType::class, $user);

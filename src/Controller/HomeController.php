@@ -25,7 +25,7 @@ class HomeController extends AbstractController
         $user = new User();
         $registerForm = $this->createForm(RegistrationFormType::class, $user);
 
-       
+      // $existUser = $userRepository->getUserByUserIdentifier('example@example.com');
 
         $pageContent = [
             'registrationForm' => $registerForm->createView(),

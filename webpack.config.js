@@ -22,6 +22,11 @@ Encore
      */
     .addEntry('main', './assets/app.js')
 
+    /**
+     * Import base form
+     */
+    .addEntry('form', './assets/js/base/form.js')
+
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
 
