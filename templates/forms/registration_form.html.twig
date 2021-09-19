@@ -1,4 +1,7 @@
-{{ form_start(registrationForm, {'action': path('registration'), 'method': 'POST'}) }}
+{{ form_start(registrationForm, 
+    {'action': path('registration'),
+     'method': 'POST', 
+     'attr': {'id': 'registration-form'}}) }}
     {{ form_errors(registrationForm)}}
     <div class="form-control-group">
         <div class="form-label">
@@ -73,6 +76,6 @@
     </div>
 
     <div class="form-control-group">
-        <input type="submit" value="Sign Up">
+        <input type="submit" value="Sign Up" class="button-type-submit", id="registration-button">
     </div>
 {{ form_end(registrationForm) }}

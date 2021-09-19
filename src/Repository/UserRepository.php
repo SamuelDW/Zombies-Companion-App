@@ -8,6 +8,9 @@ use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * Repository for the User entity
+ */
 class UserRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -17,11 +20,11 @@ class UserRepository extends ServiceEntityRepository
 
     /**
      * Finding a user by user identifier
-     * 
+     *
      * @param string $username
      *
      * @return User|null
-     * 
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getUserByUserIdentifier(string $username): ?User

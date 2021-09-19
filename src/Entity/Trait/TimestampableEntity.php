@@ -11,14 +11,14 @@ trait TimestampableEntity
 {
     /**
      * @var Carbon
-     * 
+     *
      * @ORM\Column(name="dtmAdded", type="datetime", nullable=false)
      */
     private DateTime $dateAdded;
 
     /**
      * @var Carbon
-     * 
+     *
      * @ORM\Column(name="dtmUpdated", type="datetime", nullable=true)
      */
     private Carbon $dateUpdated;

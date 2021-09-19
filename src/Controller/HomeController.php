@@ -15,7 +15,7 @@ class HomeController extends AbstractController
 {
     /**
      * Undocumented function
-     * 
+     *
      * @Route("/", name="index")
      *
      * @return Response

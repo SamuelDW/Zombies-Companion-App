@@ -1,7 +1,5 @@
 const Encore = require('@symfony/webpack-encore');
 
-// Manually configure the runtime environment if not already configured yet by the "encore" command.
-// It's useful when you use tools that rely on webpack.config.js file.
 if (!Encore.isRuntimeEnvironmentConfigured()) {
     Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
 }
@@ -10,9 +8,10 @@ Encore
     // directory where compiled assets will be stored
     .setOutputPath('public/build/')
     // public path used by the web server to access the output path
-    .setPublicPath('build')
+    .setPublicPath('build/')
+    //.setPublicPath('public/build/')
     // only needed for CDN's or sub-directory deploy
-    //.setManifestKeyPrefix('build/')
+    .setManifestKeyPrefix('build/')
 
     /*
      * ENTRY CONFIG
@@ -26,6 +25,12 @@ Encore
      * Import base form
      */
     .addEntry('form', './assets/js/base/form.js')
+
+    /**
+     * Section for importing various forms
+     */
+    .addEntry('registrationForm', './assets/js/security/registration_form.js')
+    
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
@@ -62,12 +67,8 @@ Encore
 
     // enables Sass/SCSS support
     .enableSassLoader()
-
-    // uncomment if you use TypeScript
+    //.enableVueLoader()
     //.enableTypeScriptLoader()
-
-    // uncomment if you use React
-    //.enableReactPreset()
 
     // uncomment to get integrity="..." attributes on your script & link tags
     // requires WebpackEncoreBundle 1.4 or higher

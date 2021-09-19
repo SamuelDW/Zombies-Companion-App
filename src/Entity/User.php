@@ -4,17 +4,20 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Entity\Trait\TimestampableEntity;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
+use App\Entity\Trait\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  *
  * @ORM\Table(name="tblUser")
- * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * 
+ * @UniqueEntity("email", message="Sorry, looks like you've already registered, would you like to login instead?")
+ * @UniqueEntity("username", message="This username is in use")
  */
 class User implements UserInterface
 {
@@ -62,7 +65,7 @@ class User implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="strUsername", type="string", nullable=false)
+     * @ORM\Column(name="strUsername", type="string", nullable=false, unique=true)
      *
      * @Assert\Length(
      *        min = 2,
@@ -85,14 +88,14 @@ class User implements UserInterface
      * Plain string password used for form registration
      *
      * @var string
-     * 
+     *
      */
     private string $plainPassword;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="strEmail", type="string", nullable=false)
+     * @ORM\Column(name="strEmail", type="string", nullable=false, unique=true)
      *
      * @Assert\NotNull()
      * @Assert\Email()
@@ -101,27 +104,27 @@ class User implements UserInterface
 
     /**
      * @var bool
-     * 
+     *
      *  @ORM\Column(name="bolAcceptTermsConditions", type="boolean", nullable=false)
-     * 
+     *
      * @Assert\NotNull()
      */
     private bool $acceptTermsAndConditions;
 
     /**
      * @var bool
-     * 
+     *
      *  @ORM\Column(name="bolAcceptPrivacyPolicy", type="boolean", nullable=false)
-     * 
+     *
      * @Assert\NotNull()
      */
     private bool $acceptPrivacyPolicy;
 
     /**
      * @var bool
-     * 
+     *
      * @ORM\Column(name="bolEmailOptIn", type="boolean", nullable=false)
-     * 
+     *
      * @Assert\NotNull()
      */
     private bool $emailOptIn;
@@ -166,6 +169,9 @@ class User implements UserInterface
     public function getRoles()
     {
         // TODO: Implement getRoles() method.
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
     }
 
     /**
@@ -244,7 +250,7 @@ class User implements UserInterface
      * Undocumented function
      *
      * @param string $firstname
-     * 
+     *
      * @return void
      */
     public function setFirstName(string $firstname)

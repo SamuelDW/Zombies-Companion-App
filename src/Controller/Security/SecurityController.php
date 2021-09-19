@@ -12,7 +12,7 @@ class SecurityController extends AbstractController
 {
     /**
      * Login Method
-     * 
+     *
      * @Route("/login", name="login")
      *
      * @param AuthenticationUtils $authenticationUtils
@@ -35,15 +35,12 @@ class SecurityController extends AbstractController
 
     /**
      * Logout Method
-     * 
+     *
      * @Route("/logout", name="logout")
      *
      * @return never
-     *
-     * @throws LogicException
      */
     public function logout()
     {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 }

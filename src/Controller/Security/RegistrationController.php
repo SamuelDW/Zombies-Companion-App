@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,17 +22,16 @@ class RegistrationController extends AbstractController
 {
     /**
      * AJAX Registraion method
-     * 
+     *
      * @Route("/registration", name="registration", options= {"expose" = true})
      *
      * @return Response
      */
     public function register(
-        Request $request, 
+        Request $request,
         EntityManagerInterface $entityManager,
         UserPasswordHasherInterface $passwordHasher
-    ): Response
-    {
+    ): Response {
         $user = new User();
         $registrationForm = $this->createForm(RegistrationFormType::class, $user);
 
@@ -46,15 +46,14 @@ class RegistrationController extends AbstractController
             $pageContent = [
                 'registrationForm' => $registrationForm->createView(),
             ];
-            
+
+            //TODO send validation email
+
             return $this->render('base.html.twig', $pageContent);
         }
 
-        $pageContent = [
-            'registrationForm' => $registrationForm->createView(),
-            'formErrors' => $registrationForm->getErrors()
-        ];
-        
-        return new RedirectResponse($request->headers->get('referer'));
+        dd($registrationForm->getErrors(true));
+
+        return new JsonResponse();
     }
 }
