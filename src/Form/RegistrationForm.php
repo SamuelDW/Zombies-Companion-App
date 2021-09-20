@@ -6,12 +6,13 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class RegistrationFormType extends AbstractType
 {
@@ -70,37 +71,22 @@ class RegistrationFormType extends AbstractType
             ],
         ]);
 
-        $builder->add('acceptTermsAndConditions', ChoiceType::class, [
+        $builder->add('acceptedTermsAndConditions', CheckboxType::class, [
             'label' => 'I accept the terms and conditions',
             'required' => true,
-            'multiple' => false,
-            'expanded' => true,
-            'choices' => [
-                'Yes' => true,
-                'No' => false,
-            ],
+            'mapped' => false
         ]);
 
-        $builder->add('acceptPrivacyPolicy', ChoiceType::class, [
+        $builder->add('acceptedPrivacyPolicy', CheckboxType::class, [
             'label' => 'I have read and understood the privacy policy',
             'required' => true,
-            'multiple' => false,
-            'expanded' => true,
-            'choices' => [
-                'Yes' => true,
-                'No' => false,
-            ],
+            'mapped' => false
         ]);
 
-        $builder->add('emailOptIn', ChoiceType::class, [
+        $builder->add('emailOptIn', CheckboxType::class, [
             'label' => 'Opt in to emails:',
-            'required' => true,
-            'multiple' => false,
-            'expanded' => true,
-            'choices' => [
-                'Yes' => true,
-                'No' => false,
-            ],
+            'required' => false,
+            'value' => true,
         ]);
     }
 

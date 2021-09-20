@@ -9,7 +9,6 @@ use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -36,6 +35,7 @@ class RegistrationController extends AbstractController
         $registrationForm = $this->createForm(RegistrationFormType::class, $user);
 
         $registrationForm->handleRequest($request);
+
         if ($registrationForm->isSubmitted() && $registrationForm->isValid()) {
             $password = $passwordHasher->hashPassword($user, $user->getPlainPassword());
             $user->setPassword($password);
@@ -52,8 +52,13 @@ class RegistrationController extends AbstractController
             return $this->render('base.html.twig', $pageContent);
         }
 
-        dd($registrationForm->getErrors(true));
+        $formErrors = $registrationForm->getErrors(true);
+        
+        $formErrorsToDisplay = [];
+        foreach ($formErrors as $formError) {
+            $formErrorsToDisplay[] = $formError->getMessage();
+        }
 
-        return new JsonResponse();
+        return new JsonResponse($formErrorsToDisplay);
     }
 }

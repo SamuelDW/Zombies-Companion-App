@@ -1,34 +1,30 @@
 import { Routing } from '../routing/routing'
 
-//console.log(Routing.generate('registration', true))
-
-document.addEventListener("DOMContentLoaded", function() {
-    
-// console.log(registerButton)
-//     registerButton.addEventListener('click', function() {
-//         //console.log( Routing.generate('registration', true), "Hello")
-
-//         const url = Routing.generate('registration');
-
-//         fetch(url)
-//         .then(function(response) {
-//             console.log(response)
-//         })
-//     })
- })
-
 /**
  * 
  * @param {*} pathToFetch 
  * 
  * @returns 
  */
-function fetchPostRequest(pathToFetch) {
+function fetchPostRequest(pathToFetch, formData) {
     const url = Routing.generate(pathToFetch)
 
-    fetch(url)
-    .then(function(response) {
-
+    /** 
+     * Fetch the request with the form data
+     */
+    fetch(
+        url, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: new FormData(formData)
+        }
+    )
+    .then(response => response.json())
+    .then(function(data) {
+        return data
+    })
+    .catch(formError => {
+        return formError
     })
 }
 

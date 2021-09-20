@@ -7,6 +7,7 @@ namespace App\Entity;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Trait\TimestampableEntity;
+use DateTime;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -16,7 +17,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="tblUser")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * 
- * @UniqueEntity("email", message="Sorry, looks like you've already registered, would you like to login instead?")
+ * @UniqueEntity("email", message="Sorry looks like you've already registered! Would you like to login instead")
  * @UniqueEntity("username", message="This username is in use")
  */
 class User implements UserInterface
@@ -41,8 +42,8 @@ class User implements UserInterface
      * @Assert\Length(
      *        min = 2,
      *        max = 50,
-     *        minMessage = "Your first name must be at least {{ limit}} characters long",
-     *        maxMessage = "Your first name cannot be longer than {{ limit }} characters"
+     *        minMessage = "Your first name must be at least 2 characters long",
+     *        maxMessage = "Your first name cannot be longer than 50 characters"
      * )
      */
     private string $firstName;
@@ -56,8 +57,8 @@ class User implements UserInterface
      * @Assert\Length(
      *        min = 2,
      *        max = 50,
-     *        minMessage = "Your first name must be at least {{ limit}} characters long",
-     *        maxMessage = "Your first name cannot be longer than {{ limit }} characters"
+     *        minMessage = "Your last name must be at least 2 characters long",
+     *        maxMessage = "Your last name cannot be longer than 50 characters"
      * )
      */
     private string $lastName;
@@ -70,8 +71,8 @@ class User implements UserInterface
      * @Assert\Length(
      *        min = 2,
      *        max = 15,
-     *        minMessage = "Your first name must be at least {{ limit}} characters long",
-     *        maxMessage = "Your first name cannot be longer than {{ limit }} characters"
+     *        minMessage = "Your username must be at least 2 characters long",
+     *        maxMessage = "Your first name cannot be longer than 15 characters"
      * )
      */
     private string $username;
@@ -103,35 +104,37 @@ class User implements UserInterface
     private string $email;
 
     /**
-     * @var bool
+     * @var DateTime
      *
-     *  @ORM\Column(name="bolAcceptTermsConditions", type="boolean", nullable=false)
+     *  @ORM\Column(name="dtmAcceptedTermsAndConditions", type="datetime", nullable=false)
      *
-     * @Assert\NotNull()
+     * @Assert\NotNull(message="You must accept the terms and conditions")
      */
-    private bool $acceptTermsAndConditions;
+    private DateTime $acceptedTermsAndConditions;
 
     /**
-     * @var bool
+     * @var DateTime
      *
-     *  @ORM\Column(name="bolAcceptPrivacyPolicy", type="boolean", nullable=false)
+     *  @ORM\Column(name="dtmAcceptedPrivacyPolicy", type="datetime", nullable=false)
      *
-     * @Assert\NotNull()
+     * @Assert\NotNull(message="You must accept the privacy policy")
      */
-    private bool $acceptPrivacyPolicy;
+    private DateTime $acceptedPrivacyPolicy;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="bolEmailOptIn", type="boolean", nullable=false)
      *
-     * @Assert\NotNull()
+     * @Assert\NotNull(message="You must decide to opt in or out of emails")
      */
     private bool $emailOptIn;
 
     public function __construct()
     {
         $this->dateAdded = Carbon::now();
+        $this->acceptedPrivacyPolicy = Carbon::now();
+        $this->acceptedTermsAndConditions = Carbon::now();
     }
 
     /**
@@ -190,21 +193,21 @@ class User implements UserInterface
     /**
      * Undocumented function
      *
-     * @return boolean
+     * @return DateTime
      */
-    public function getAcceptTermsAndConditions(): bool
+    public function getAcceptTermsAndConditions(): DateTime
     {
-        return $this->acceptTermsAndConditions;
+        return $this->acceptedTermsAndConditions;
     }
 
     /**
      * Undocumented function
      *
-     * @return boolean
+     * @return DateTime
      */
-    public function getAcceptPrivacyPolicy(): bool
+    public function getAcceptPrivacyPolicy(): DateTime
     {
-        return $this->acceptPrivacyPolicy;
+        return $this->acceptedPrivacyPolicy;
     }
 
     /**
@@ -287,16 +290,6 @@ class User implements UserInterface
     public function setPassword(string $password)
     {
         $this->password = $password;
-    }
-
-    public function setAcceptTermsAndConditions(bool $accepted)
-    {
-        $this->acceptTermsAndConditions = $accepted;
-    }
-
-    public function setAcceptPrivacyPolicy(bool $accepted)
-    {
-        $this->acceptPrivacyPolicy = $accepted;
     }
 
     public function setEmailOptIn(bool $accepted)
