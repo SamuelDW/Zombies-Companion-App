@@ -6,6 +6,7 @@ namespace App\Controller\Security;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -43,13 +44,9 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $pageContent = [
-                'registrationForm' => $registrationForm->createView(),
-            ];
-
             //TODO send validation email
 
-            return $this->render('base.html.twig', $pageContent);
+            return $this->redirectToRoute('index');
         }
 
         $formErrors = $registrationForm->getErrors(true);
@@ -60,5 +57,41 @@ class RegistrationController extends AbstractController
         }
 
         return new JsonResponse($formErrorsToDisplay);
+    }
+
+    /**
+     * AJAX validation of emails
+     * 
+     * @Route("/validation/email", name="validation_email", options={"expose"=true})
+     *
+     * @return Reponse
+     */
+    public function validateUserEmail(Request $request, UserRepository $userRepository): Response
+    {
+        $isEmailExist = $userRepository->getUserByUserEmail($request->getContent())? true : false;
+
+        if($isEmailExist) {
+            return new JsonResponse([true]);
+        }
+        
+        return new JsonResponse([false]);
+    }
+
+    /**
+     * AJAX validation of usernames
+     * 
+     * @Route("/validation/username", name="validation_username", options={"expose"=true})
+     *
+     * @return Reponse
+     */
+    public function validateUsername(Request $request, UserRepository $userRepository): Response
+    {
+        $isUsernameExist = $userRepository->getUserByUserIdentifier($request->getContent())? true : false;
+        
+        if($isUsernameExist) {
+            return new JsonResponse([true]);
+        }
+        
+        return new JsonResponse([false]);
     }
 }

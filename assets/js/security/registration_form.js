@@ -1,4 +1,4 @@
-import {FormValidation} from '../forms/form_validation';
+import {isFieldValid, isFormValid, doesEmailExist, doesUsernameExist} from '../forms/form_validation';
 import {fetchPostRequest} from '../base/form';
 import { Routing } from '../routing/routing';
 
@@ -17,7 +17,7 @@ let formFields = {
 
 document.addEventListener("DOMContentLoaded", function() { 
 
-    FormValidation.isFormValid(formFields, '#registration-button')
+    isFormValid(formFields, '#registration-button')
 
     let firstName = document.querySelector('#registrationForm_firstName'),
         lastName = document.querySelector('#registrationForm_lastName'),
@@ -31,36 +31,47 @@ document.addEventListener("DOMContentLoaded", function() {
      * On form change, check if the form is valid and set button to disabled/enabled
      */
     document.querySelector('#registration-form').addEventListener('input', function() {
-        FormValidation.isFormValid(formFields, '#registration-button')
+        isFormValid(formFields, '#registration-button')
     })
 
     firstName.addEventListener('input', function() {
-       formFields.firstName =  FormValidation.isFieldValid(firstName.value, formFields.firstName)
+       formFields.firstName =  isFieldValid(firstName.value, formFields.firstName)
     })
 
     lastName.addEventListener('input', function() {
-        formFields.lastName = FormValidation.isFieldValid(lastName.value, formFields.lastName)
+        formFields.lastName = isFieldValid(lastName.value, formFields.lastName)
     })
 
     email.addEventListener('input', function() {
-        formFields.email = FormValidation.isFieldValid(email.value, formFields.email)
+        formFields.email = isFieldValid(email.value, formFields.email)
     })
 
     username.addEventListener('input', function() {
-        formFields.username = FormValidation.isFieldValid(username.value, formFields.username)
+        formFields.username = isFieldValid(username.value, formFields.username, true)
+    })
+
+    username.addEventListener('change', function() {
+        doesUsernameExist(username.value).then(function(result) {
+            formFields.username = !result[0]
+        })
+    })
+
+    email.addEventListener('change', function() {
+        doesEmailExist(email.value).then(function(result) {
+            formFields.email = !result[0]
+        })
     })
 
     password.addEventListener('input', function() {
-        formFields.password = FormValidation.isFieldValid(password.value, formFields.password)
+        formFields.password = isFieldValid(password.value, formFields.password)
     })
 
     termsAndConditions.addEventListener('input', function() {
-        console.log(termsAndConditions.value)
-        formFields.termsAndConditions = FormValidation.isFieldValid(termsAndConditions.value, formFields.termsAndConditions)
+        formFields.termsAndConditions = termsAndConditions.checked
     })
 
     privacyPolicy.addEventListener('input', function() {
-        formFields.privacyPolicy = FormValidation.isFieldValid(privacyPolicy.value, formFields.privacyPolicy)
+        formFields.privacyPolicy = privacyPolicy.checked
     })
 
     /**
@@ -70,7 +81,6 @@ document.addEventListener("DOMContentLoaded", function() {
         if((document.querySelector('#registration-button').disabled)) {
             return
         }
-        console.log(new FormData(document.querySelector('#registration-form')), "HELLO")
         const url = Routing.generate('registration')
         fetch(url, {
             method: 'POST',
@@ -79,10 +89,10 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .then((response) => response.json())
         .then(function(data) {
-            console.log(data)
+            return data
         })
         .catch(error => {
-            console.log(error)
+            return error
         })
      })
 })

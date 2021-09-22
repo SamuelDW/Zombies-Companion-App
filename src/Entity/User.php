@@ -124,9 +124,7 @@ class User implements UserInterface
     /**
      * @var bool
      *
-     * @ORM\Column(name="bolEmailOptIn", type="boolean", nullable=false)
-     *
-     * @Assert\NotNull(message="You must decide to opt in or out of emails")
+     * @ORM\Column(name="bolEmailOptIn", type="boolean", nullable=true)
      */
     private bool $emailOptIn;
 

@@ -1,0 +1,14 @@
+/**
+ * Primary Colours
+ */
+$blood-red: hsl(2, 74%, 41%);
+$blue-glow: hsl(192, 79%, 66%);
+$light-grey: hsl(94, 10%, 14%);
+$dirty-yellow: hsl(54, 100%, 55%);
+
+ /**
+  * Form Input Colours
+  */
+  $focus-border-color: $blood-red;
+  $primary-input-background: $light-grey;
+  $primary-input-font-color: $dirty-yellow;

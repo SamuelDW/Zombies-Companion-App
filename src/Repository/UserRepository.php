@@ -37,4 +37,24 @@ class UserRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * Finding a user by user identifier
+     *
+     * @param string $email
+     *
+     * @return User|null
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getUserByUserEmail(string $email): ?User
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder('user');
+        $qb->select('u')
+            ->from(User::class, 'u')
+            ->where('u.email = :email')
+            ->setParameter('email', $email);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 }
